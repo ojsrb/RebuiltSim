@@ -1,3 +1,4 @@
+import threading
 from enum import Enum
 from models.utils import *
 from models.field import Field
@@ -39,10 +40,13 @@ class Robot:
 
         self.field = field
 
-    def moveTo(self, location, timestamp):
+        thread =  threading.Thread(target=self.instruction, args=(self.field, self))
+        thread.start()
+
+    def moveTo(self, field, location):
         if location == self.position or self.moving:
             return
-        self.startedMoving = timestamp
+        self.startedMoving = field.timestamp
         self.moving = location
         self.state = states.MOVING
 
@@ -51,13 +55,11 @@ class Robot:
             if self.startedMoving + self.moveTime <= timestamp:
                 self.position = self.moving
                 self.moving = None
-        else:
-            self.instruction(self.field, self, timestamp)
 
-    def intake(self, field, timestamp):
+    def intake(self, field):
         if not self.moving:
             self.state = states.INTAKING
-        if timestamp % (60 / self.intakeSpeed) == 0 and self.fuel < self.capacity and not self.moving:
+        if field.timestamp % (60 / self.intakeSpeed) == 0 and self.fuel < self.capacity and not self.moving:
             if self.position == positions.RED:
                 field.redIntake()
             elif self.position == positions.BLUE:
@@ -66,11 +68,15 @@ class Robot:
                 field.neutralIntake()
 
             self.fuel += 1
+        if self.fuel == self.capacity:
+            return True
+        else:
+            return False
 
-    def shoot(self, field, timestamp):
+    def shoot(self, field):
         if not self.moving:
             self.state = states.INTAKING
-        if timestamp % (60 / self.shootSpeed) == 0 and self.fuel > 0 and not self.moving:
+        if field.timestamp % (60 / self.shootSpeed) == 0 and self.fuel > 0 and not self.moving:
             if self.position== positions.RED:
                 field.addRedScore()
                 self.fuel -= 1

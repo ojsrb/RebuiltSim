@@ -9,6 +9,4 @@ class Vec2:
     def __sub__(self, other):
         return Vec2(self.x - other.x, self.y - other.y)
     
-
-    
     

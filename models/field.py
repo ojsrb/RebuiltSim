@@ -18,7 +18,7 @@ class Field:
 
         self.pastAuto = False
         self.redWonAuto = False
-
+        self.timestamp = 0
     #score fuel/fuel back to neutral
     def addBlueScore(self):
         self.blueScore += 1
@@ -44,6 +44,7 @@ class Field:
                 self.redWonAuto = False
             self.pastAuto = True
     def update(self, timeStampInFrames: int):
+        self.timestamp = timeStampInFrames
         if timeStampInFrames <= 1200:
             self.state = fieldState.AUTO
         elif timeStampInFrames <= 1800:
