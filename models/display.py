@@ -36,10 +36,12 @@ def drawRobot(robot: Robot):
         color = pygame.Color('blue')
     pygame.draw.rect(screen, color, pygame.Rect(x-(width/2), y-(width/2), width, width), 4)
 
-def update(matchInfo: Field):
+def update(matchInfo: Field, visualize=False):
     currentNeutralFuel = matchInfo.neutralFuel
     currentBlueField = matchInfo.blueFuel
     currentRedField = matchInfo.redFuel
+
+    print(currentNeutralFuel, currentBlueField, currentRedField)
 
     globalNeutralFuel.append(currentNeutralFuel)
     globalBlueFuel.append(currentBlueField)
@@ -47,16 +49,14 @@ def update(matchInfo: Field):
     time.append(matchInfo.timestamp)
 
 
-    pygame.display.update()
-    screen.blit(background, (0, 0))
+    if visualize:
+        pygame.display.update()
+        screen.blit(background, (0, 0))
 
-    # graph code
-
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
 def displayGraph(field : Field):
     autoWinner = ""

@@ -1,9 +1,8 @@
-from models import display
 from models.field import Field, fieldState
 import time
 from models.robot import Robot
 from models.instructions import *
-# import models.display as display
+import models.display as display
 
 field = Field(0,0, 400, 0, 0)
 
@@ -47,10 +46,10 @@ while True:
     display.update(field)
     end_time = time.time()
     elapsed_time = end_time - start_time
-    time.sleep(1/30)
+    print(field.state, robot0.position)
+    time.sleep(0.001)
 
     if field.state == fieldState.OVER:
         break
-
 
 display.displayGraph(field)

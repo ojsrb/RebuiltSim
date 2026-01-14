@@ -109,11 +109,11 @@ class Robot:
             cooldown = math.floor((1 / self.intakeSpeed) * 30) # cooldown in frames between intakes
             if self.frame - self.startedInstruction >= cooldown and self.fuel < self.capacity:
                 self.fuel += 1
-                if self.position == position.BLUE:
+                if self.position == position.BLUE and self.field.blueFuel > 0:
                     self.field.blueIntake()
-                elif self.position == position.NEUTRAL:
+                elif self.position == position.NEUTRAL and self.field.neutralFuel > 0:
                     self.field.neutralIntake()
-                elif self.position == position.RED:
+                elif self.position == position.RED and self.field.redFuel > 0:
                     self.field.redIntake()
 
             if self.fuel == self.capacity:
@@ -127,24 +127,25 @@ class Robot:
                 if self.position == position.BLUE:
                     self.field.addBlueScore()
                 elif self.position == position.RED:
-                    self.field.addRedScore()
+                    self.field.redScore += 1
+                    self.field.neutralFuel += 1
 
             if self.fuel == 0:
                 self.index += 1
                 self.startedInstruction = self.frame
 
         elif current == action.PASS:
-            cooldown = math.floor((1 / self.shootSpeed) * 30)
-            if self.frame - self.startedInstruction >= cooldown and self.fuel > 0:
-                self.fuel -= 1
+            cooldown = math.floor((1 / self.shootSpeed) * 30) + math.floor((1 / self.intakeSpeed) * 30)
+            if self.frame - self.startedInstruction >= cooldown and self.position == position.NEUTRAL and self.field.neutralFuel > 0 and self.fuel < self.capacity:
                 if self.alliance == alliance.RED:
-                    self.field.addRedScore()
+                    self.field.neutralFuel -= 1
+                    self.field.redFuel += 1
                 elif self.alliance == alliance.BLUE:
-                    self.field.addBlueScore()
+                    self.field.neutralFuel -= 1
+                    self.field.blueFuel += 1
 
-                if self.fuel == 0:
-                    self.index += 1
-                    self.startedInstruction = self.frame
+            self.index += 1
+            self.startedInstruction = self.frame
 
         self.frame += 1
 

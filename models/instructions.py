@@ -4,9 +4,8 @@ from models.field import Field, fieldState
 
 redCycle = Instruction('redCycle')
 redCycle.activeHub([
-    action.MOVE_NEUTRAL,
-    action.INTAKE,
     action.MOVE_HOME,
+    action.INTAKE,
     action.SCORE
 ])
 redCycle.inactiveHub([
