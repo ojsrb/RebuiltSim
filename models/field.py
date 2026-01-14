@@ -54,10 +54,11 @@ class Field:
         self.blueFuel += 1
 
     def update(self, timeStampInFrames: int):
+        timeStampInFrames = timeStampInFrames * 2
         self.timestamp = timeStampInFrames
-        if timeStampInFrames <= 1200:
+        if timeStampInFrames <= 1200/2:
             self.state = fieldState.AUTO
-        elif timeStampInFrames <= 1800:
+        elif timeStampInFrames <= 1800/2:
             self.state = fieldState.TRANS
             self.calculateHubOrder()
         if self.redWonAuto and (timeStampInFrames >= 1800): # set the times

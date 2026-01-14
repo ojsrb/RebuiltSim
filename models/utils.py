@@ -8,5 +8,12 @@ class Vec2:
     
     def __sub__(self, other):
         return Vec2(self.x - other.x, self.y - other.y)
-    
-    
+
+
+def wait(field, seconds):
+    start = field.timestamp
+    while True:
+        elapsed = field.timestamp - start
+
+        if elapsed > seconds * 30:
+            break

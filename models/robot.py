@@ -46,15 +46,17 @@ class Robot:
         thread.start()
 
     def moveTo(self, field, location):
-        time.sleep(self.moveTime)
+        self.state = states.MOVING
+        wait(field, self.moveTime)
         self.position = location
+        self.state = states.MOVING
+
 
     def intake(self, field):
-        if not self.moving:
-            self.state = states.INTAKING
         if self.fuel < self.capacity and not self.moving:
             if self.state != states.INTAKING:
                 time.sleep(self.moveTime / 4)
+            self.state = states.INTAKING
             if self.position == positions.RED and field.redFuel > 0:
                 field.redIntake()
             elif self.position == positions.BLUE and field.blueFuel > 0:
@@ -65,20 +67,20 @@ class Robot:
                 return
 
             self.fuel += 1
-            time.sleep(1 / self.intakeSpeed)
+            wait(field, 1 / self.intakeSpeed)
 
     def shoot(self, field):
-        if not self.moving:
-            self.state = states.INTAKING
         if self.fuel > 0 and not self.moving:
             self.state = states.SHOOTING
-            if self.position== positions.RED:
+            if self.position == positions.RED:
                 field.addRedScore()
                 self.fuel -= 1
-            else:
+            elif self.position== positions.BLUE:
                 field.addBlueScore()
                 self.fuel -= 1
-            time.sleep(1 / self.shootSpeed)
+            else:
+                return
+            wait(field, 1 / self.shootSpeed)
 
     def shuttle(self, field, position):
         if self.fuel > 0 and not self.moving:
@@ -89,4 +91,4 @@ class Robot:
             elif position == positions.BLUE:
                 self.fuel -= 1
                 field.shuttleBlue()
-            time.sleep(1 / self.intakeSpeed)
+            wait(field, 1 / self.shootSpeed)
