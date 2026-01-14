@@ -1,6 +1,6 @@
 from models.field import Field, fieldState
 import time
-from models.robot import Robot
+from models.robot import Robot, alliance
 from models.instructions import *
 import models.display as display
 
@@ -8,23 +8,29 @@ field = Field(0,0, 400, 0, 0)
 
 frame = 0
 
-robot0 = Robot(field, 0, 8, 8, 240, 45, True, redCycle)
-# robot1 = Robot(field, 1, 8, 8, 240, 45, True, instructions.shuttleRed)
-# robot2 = Robot(field, 2, 8, 8, 240, 45, True, instructions.shootRed)
-#
-# # self, redFuel : int, blueFuel : int,neutralFuel : int,redScore : int,blueScore : int
-# # BLUE ALLIANCE
-# robot3 = Robot(field, 3, 8, 8, 240, 45, True, instructions.blueCycle)
-# robot4 = Robot(field, 4, 8, 8, 240, 45, True, instructions.blueCycle)
-# robot5 = Robot(field, 5, 8, 8, 240, 45, True, instructions.blueCycle)
+# RED ALLIANCE
+robot0 = Robot(field, alliance.RED, 8, 8, 240, 45, True, cycle)
+robot1 = Robot(field, alliance.RED, 8, 8, 240, 45, True, shuttle)
+robot2 = Robot(field, alliance.RED, 8, 8, 240, 45, True, shoot)
+
+# self, redFuel : int, blueFuel : int,neutralFuel : int,redScore : int,blueScore : int
+# BLUE ALLIANCE
+robot3 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
+robot4 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
+robot5 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
 
 elapsed_time = 1
 
 while True:
     start_time = time.time()
     field.update(frame)
+    robot3.tick()
+    robot4.tick()
+    robot5.tick()
     robot0.tick()
-    display.drawRobot(robot0)
+    robot1.tick()
+    robot2.tick()
+    # display.drawRobot(robot0)
     # display.drawRobot(robot1)
     # display.drawRobot(robot2)
     # display.drawRobot(robot3)
@@ -40,15 +46,11 @@ while True:
         f"blue field fuel: {field.blueFuel} | "
         f"red field fuel: {field.redFuel} | ",
         flush=True,
-        end='\r'
     )
     frame += 1
     display.update(field)
     end_time = time.time()
     elapsed_time = end_time - start_time
-    print(field.state, robot0.position)
-    time.sleep(0.001)
-
     if field.state == fieldState.OVER:
         break
 

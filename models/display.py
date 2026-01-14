@@ -41,8 +41,6 @@ def update(matchInfo: Field, visualize=False):
     currentBlueField = matchInfo.blueFuel
     currentRedField = matchInfo.redFuel
 
-    print(currentNeutralFuel, currentBlueField, currentRedField)
-
     globalNeutralFuel.append(currentNeutralFuel)
     globalBlueFuel.append(currentBlueField)
     globalRedFuel.append(currentRedField)
