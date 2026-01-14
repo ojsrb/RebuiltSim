@@ -1,6 +1,6 @@
 import sys
 import pygame
-from models.robot import Robot, positions, states
+from models.robot import Robot, position
 from models.field import Field
 import matplotlib.pyplot as plt
 
@@ -21,13 +21,13 @@ def drawRobot(robot: Robot):
     x = 0
     y = 0
 
-    if robot.position == positions.RED:
+    if robot.position == position.RED:
         x = screen.get_width()/2
         y = 650 * 7/8
-    elif robot.position == positions.NEUTRAL:
+    elif robot.position == position.NEUTRAL:
         x = screen.get_width()/2
         y = screen.get_height()/2
-    elif robot.position == positions.BLUE:
+    elif robot.position == position.BLUE:
         x = screen.get_width()/2
         y = 650 * 1/8
     if robot.number <= 2:

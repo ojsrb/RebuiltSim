@@ -1,94 +1,152 @@
+import math
 import threading
 import time
 from enum import Enum
 from models.utils import *
-from models.field import Field
+from models.field import Field, fieldState
 
-class positions(Enum):
+class Instruction:
+    def __init__(self, name: str):
+        self.name = name
+        self.active = []
+        self.inactive = []
+
+    def activeHub(self, actions: list[action]):
+        self.active = actions
+
+    def inactiveHub(self, actions: list[action]):
+        self.inactive = actions
+
+class position(Enum):
     RED = 0
     NEUTRAL = 1
     BLUE = 2
 
-class states(Enum):
-    MOVING = 0
-    INTAKING = 1
-    SHOOTING = 2
-    STOPPED = 3
-    SHUTTLING = 4
+class alliance(Enum):
+    RED = 0
+    BLUE = 1
+
+class action(Enum):
+    MOVE_HOME = 0
+    MOVE_NEUTRAL = 1
+    MOVE_OPP = 2
+
+    INTAKE = 3
+    SCORE = 4
+
+    PASS = 5
+
+class state(Enum):
+    ACTIVE = 0
+    INACTIVE = 1
 
 class Robot:
-    def __init__(self, field: Field, number: int, shootSpeed: float, intakeSpeed: float, driveSpeed: float, capacity: int, preload: bool, instruction):
+    def __init__(self, field: Field, number: int, shootSpeed: float, intakeSpeed: float, driveSpeed: float, capacity: int, preload: bool, instruction: Instruction):
         self.number = number
-        self.state = states.STOPPED
+        if self.number <= 2:
+            self.alliance = alliance.RED
+            self.activeStates = [fieldState.RED_ACTIVE, fieldState.AUTO, fieldState.END, fieldState.TRANS]
+            self.home = position.RED
+            self.opp = position.BLUE
+        else:
+            self.alliance = alliance.BLUE
+            self.activeStates= [fieldState.BLUE_ACTIVE, fieldState.AUTO, fieldState.END, fieldState.TRANS]
+            self.home = position.BLUE
+            self.opp = position.RED
         self.shootSpeed = shootSpeed
         self.intakeSpeed = intakeSpeed
         self.driveSpeed = driveSpeed
-        self.width = 25
-        self.moving = None
-        self.moveTime = 310 / self.driveSpeed # distance to drive
         if self.number <= 2:
-            self.position = positions.RED
+            self.position = position.RED
         else:
-            self.position = positions.BLUE
-
+            self.position = position.BLUE
         if preload:
             self.fuel = 8
         else:
             self.fuel = 0
-
         self.capacity = capacity
-
         self.instruction = instruction
-
+        self.startedInstruction = 0
         self.field = field
+        self.state = state.ACTIVE
 
-        thread =  threading.Thread(target=self.instruction, args=(self.field, self))
-        thread.start()
+        self.frame = 0
+        self.index = 0
 
-    def moveTo(self, field, location):
-        self.state = states.MOVING
-        wait(field, self.moveTime)
-        self.position = location
-        self.state = states.MOVING
+    def tick(self):
+        if self.field.state in self.activeStates and self.state == state.INACTIVE:
+            self.state = state.ACTIVE
+            self.index = 0
+        elif self.field.state not in self.activeStates and self.state == state.ACTIVE:
+            self.state = state.INACTIVE
+            self.index = 0
 
+        if self.state == state.ACTIVE:
+            current = self.instruction.active[self.index]
+            length = len(self.instruction.active)
+        else:
+            current = self.instruction.inactive[self.index]
+            length = len(self.instruction.inactive)
 
-    def intake(self, field):
-        if self.fuel < self.capacity and not self.moving:
-            if self.state != states.INTAKING:
-                time.sleep(self.moveTime / 4)
-            self.state = states.INTAKING
-            if self.position == positions.RED and field.redFuel > 0:
-                field.redIntake()
-            elif self.position == positions.BLUE and field.blueFuel > 0:
-                field.blueIntake()
-            elif self.position == positions.NEUTRAL and field.neutralFuel > 0:
-                field.neutralIntake()
-            else:
-                return
+        if current in [action.MOVE_HOME, action.MOVE_NEUTRAL, action.MOVE_OPP]:
 
-            self.fuel += 1
-            wait(field, 1 / self.intakeSpeed)
+            if (current == action.MOVE_HOME and self.position == self.home) or (current == action.MOVE_OPP and self.position == self.opp) or (current == action.MOVE_NEUTRAL and self.position == position.BLUE):
+                self.index += 1
+                self.startedInstruction = self.frame
+            elif self.frame - self.startedInstruction >= (310/self.driveSpeed)*30:
 
-    def shoot(self, field):
-        if self.fuel > 0 and not self.moving:
-            self.state = states.SHOOTING
-            if self.position == positions.RED:
-                field.addRedScore()
+                if current == action.MOVE_HOME:
+                    self.position = self.home
+                elif current == action.MOVE_NEUTRAL:
+                    self.position = position.NEUTRAL
+                elif current == action.MOVE_OPP:
+                    self.position = self.opp
+
+                self.index += 1
+                self.startedInstruction = self.frame
+
+        elif current == action.INTAKE:
+            cooldown = math.floor((1 / self.intakeSpeed) * 30) # cooldown in frames between intakes
+            if self.frame - self.startedInstruction >= cooldown and self.fuel < self.capacity:
+                self.fuel += 1
+                if self.position == position.BLUE:
+                    self.field.blueIntake()
+                elif self.position == position.NEUTRAL:
+                    self.field.neutralIntake()
+                elif self.position == position.RED:
+                    self.field.redIntake()
+
+            if self.fuel == self.capacity:
+                self.index += 1
+                self.startedInstruction = self.frame
+
+        elif current == action.SCORE:
+            cooldown = math.floor((1 / self.shootSpeed) * 30)
+            if self.frame - self.startedInstruction >= cooldown and self.fuel > 0:
                 self.fuel -= 1
-            elif self.position== positions.BLUE:
-                field.addBlueScore()
-                self.fuel -= 1
-            else:
-                return
-            wait(field, 1 / self.shootSpeed)
+                if self.position == position.BLUE:
+                    self.field.addBlueScore()
+                elif self.position == position.RED:
+                    self.field.addRedScore()
 
-    def shuttle(self, field, position):
-        if self.fuel > 0 and not self.moving:
-            self.state = states.SHOOTING
-            if position == positions.RED:
+            if self.fuel == 0:
+                self.index += 1
+                self.startedInstruction = self.frame
+
+        elif current == action.PASS:
+            cooldown = math.floor((1 / self.shootSpeed) * 30)
+            if self.frame - self.startedInstruction >= cooldown and self.fuel > 0:
                 self.fuel -= 1
-                field.shuttleRed()
-            elif position == positions.BLUE:
-                self.fuel -= 1
-                field.shuttleBlue()
-            wait(field, 1 / self.shootSpeed)
+                if self.alliance == alliance.RED:
+                    self.field.addRedScore()
+                elif self.alliance == alliance.BLUE:
+                    self.field.addBlueScore()
+
+                if self.fuel == 0:
+                    self.index += 1
+                    self.startedInstruction = self.frame
+
+        self.frame += 1
+
+        if self.index == length:
+            self.index = 0
