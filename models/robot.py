@@ -1,4 +1,5 @@
 import threading
+import time
 from enum import Enum
 from models.utils import *
 from models.field import Field
@@ -13,6 +14,7 @@ class states(Enum):
     INTAKING = 1
     SHOOTING = 2
     STOPPED = 3
+    SHUTTLING = 4
 
 class Robot:
     def __init__(self, field: Field, number: int, shootSpeed: float, intakeSpeed: float, driveSpeed: float, capacity: int, preload: bool, instruction):
@@ -23,7 +25,7 @@ class Robot:
         self.driveSpeed = driveSpeed
         self.width = 25
         self.moving = None
-        self.moveTime = 310 / (self.driveSpeed / 60) # distance to drive
+        self.moveTime = 310 / self.driveSpeed # distance to drive
         if self.number <= 2:
             self.position = positions.RED
         else:
@@ -44,42 +46,47 @@ class Robot:
         thread.start()
 
     def moveTo(self, field, location):
-        if location == self.position or self.moving:
-            return
-        self.startedMoving = field.timestamp
-        self.moving = location
-        self.state = states.MOVING
-
-    def update(self, timestamp):
-        if self.moving:
-            if self.startedMoving + self.moveTime <= timestamp:
-                self.position = self.moving
-                self.moving = None
+        time.sleep(self.moveTime)
+        self.position = location
 
     def intake(self, field):
         if not self.moving:
             self.state = states.INTAKING
-        if field.timestamp % (60 / self.intakeSpeed) == 0 and self.fuel < self.capacity and not self.moving:
-            if self.position == positions.RED:
+        if self.fuel < self.capacity and not self.moving:
+            if self.state != states.INTAKING:
+                time.sleep(self.moveTime / 4)
+            if self.position == positions.RED and field.redFuel > 0:
                 field.redIntake()
-            elif self.position == positions.BLUE:
+            elif self.position == positions.BLUE and field.blueFuel > 0:
                 field.blueIntake()
-            else:
+            elif self.position == positions.NEUTRAL and field.neutralFuel > 0:
                 field.neutralIntake()
+            else:
+                return
 
             self.fuel += 1
-        if self.fuel == self.capacity:
-            return True
-        else:
-            return False
+            time.sleep(1 / self.intakeSpeed)
 
     def shoot(self, field):
         if not self.moving:
             self.state = states.INTAKING
-        if field.timestamp % (60 / self.shootSpeed) == 0 and self.fuel > 0 and not self.moving:
+        if self.fuel > 0 and not self.moving:
+            self.state = states.SHOOTING
             if self.position== positions.RED:
                 field.addRedScore()
                 self.fuel -= 1
             else:
                 field.addBlueScore()
                 self.fuel -= 1
+            time.sleep(1 / self.shootSpeed)
+
+    def shuttle(self, field, position):
+        if self.fuel > 0 and not self.moving:
+            self.state = states.SHOOTING
+            if position == positions.RED:
+                self.fuel -= 1
+                field.shuttleRed()
+            elif position == positions.BLUE:
+                self.fuel -= 1
+                field.shuttleBlue()
+            time.sleep(1 / self.intakeSpeed)

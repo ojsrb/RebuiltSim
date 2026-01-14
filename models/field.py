@@ -6,6 +6,7 @@ class fieldState(Enum):
     RED_ACTIVE = 3
     BLUE_ACTIVE = 4
     END = 5
+    OVER = 6
 
 class Field:
     def __init__(self, redFuel : int, blueFuel : int,neutralFuel : int,redScore : int,blueScore : int):
@@ -21,12 +22,14 @@ class Field:
         self.timestamp = 0
     #score fuel/fuel back to neutral
     def addBlueScore(self):
-        self.blueScore += 1
-        self.neutralFuel += 1
+        if self.state != fieldState.RED_ACTIVE:
+            self.blueScore += 1
+            self.neutralFuel += 1
 
     def addRedScore(self):
-        self.redScore += 1
-        self.neutralFuel += 1
+        if self.state != fieldState.BLUE_ACTIVE:
+            self.redScore += 1
+            self.neutralFuel += 1
     # lose fuel/fuel intaked
 
     def blueIntake(self):
@@ -43,6 +46,13 @@ class Field:
             else:
                 self.redWonAuto = False
             self.pastAuto = True
+
+    def shuttleRed(self):
+        self.redFuel += 1
+
+    def shuttleBlue(self):
+        self.blueFuel += 1
+
     def update(self, timeStampInFrames: int):
         self.timestamp = timeStampInFrames
         if timeStampInFrames <= 1200:
@@ -70,4 +80,6 @@ class Field:
                 self.state = fieldState.BLUE_ACTIVE
         if 7800 < timeStampInFrames <= 9300:
             self.state = fieldState.END
+        if timeStampInFrames >= 9600:
+            self.state = fieldState.OVER
             
