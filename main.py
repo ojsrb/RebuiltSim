@@ -28,8 +28,10 @@ robot5 = Robot(field, alliance.BLUE, 3, 3, 144, 8, True, cycle)
 print("beginning simulation.")
 
 while True:
-    start_time = time.time()
+    # update field
     field.update(frame)
+
+    # update each robot
     robot3.tick()
     robot4.tick()
     robot5.tick()
