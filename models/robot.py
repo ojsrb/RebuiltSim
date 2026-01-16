@@ -109,15 +109,12 @@ class Robot:
                     if self.position == position.BLUE and self.field.blueFuel > 0:
                         self.field.blueFuel -= 1
                         self.fuel += 1
-                        print("intaking blue", self.fuel)
                     elif self.position == position.NEUTRAL and self.field.neutralFuel > 0:
                         self.field.neutralFuel -= 1
                         self.fuel += 1
-                        print("intaking neutral", self.fuel)
                     elif self.position == position.RED and self.field.redFuel > 0:
                         self.field.redFuel -= 1
                         self.fuel += 1
-                        print("intaking red", self.fuel)
                     else:
                         self.nextAction()
                     if self.fuel == self.capacity:
@@ -127,25 +124,22 @@ class Robot:
 
         elif current == action.SCORE:
             if self.fuel > 0:
-                cooldown = math.floor((1 / self.shootSpeed) * 30) # cooldown in frames between intakes
+                cooldown = math.floor((1 / self.shootSpeed) * 30) # cooldown in frames between shoots
                 if self.frame - self.startedInstruction >= cooldown:
                     if self.position == position.BLUE and self.fuel > 0:
                         self.field.neutralFuel += 1
                         self.field.blueScore += 1
                         self.fuel -= 1
-                        print("scoring blue", self.fuel)
                     elif self.position == position.RED and self.fuel > 0:
                         self.field.neutralFuel += 1
                         self.field.redScore += 1
                         self.fuel -= 1
-                        print("scoring red", self.fuel)
                     if self.fuel == 0:
                         self.nextAction()
             else:
                 self.nextAction()
 
         elif current == action.PASS:
-            print(self.position)
             cooldown = math.floor((1 / self.shootSpeed) * 30) + math.floor((1 / self.intakeSpeed) * 30)
             if self.frame - self.startedInstruction >= cooldown and self.position == position.NEUTRAL and self.field.neutralFuel > 0:
                 if self.color == alliance.RED:

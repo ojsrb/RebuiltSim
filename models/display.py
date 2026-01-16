@@ -1,42 +1,17 @@
 import sys
-import pygame
 from models.robot import Robot, position
 from models.field import Field
 import matplotlib.pyplot as plt
 
-pygame.init()
-
-screen = pygame.display.set_mode((325, 650))
-pygame.display.set_caption("Field Display")
-
-background = pygame.image.load('lib/field.bmp').convert()
-
+# graphing metrics
 scores = [0,0]
 globalNeutralFuel = []
 globalBlueFuel = []
 globalRedFuel = []
 time = []
-def drawRobot(robot: Robot):
-    width = 28
-    x = 0
-    y = 0
 
-    if robot.position == position.RED:
-        x = screen.get_width()/2
-        y = 650 * 7/8
-    elif robot.position == position.NEUTRAL:
-        x = screen.get_width()/2
-        y = screen.get_height()/2
-    elif robot.position == position.BLUE:
-        x = screen.get_width()/2
-        y = 650 * 1/8
-    if robot.number <= 2:
-        color = pygame.Color('red')
-    else:
-        color = pygame.Color('blue')
-    pygame.draw.rect(screen, color, pygame.Rect(x-(width/2), y-(width/2), width, width), 4)
-
-def update(matchInfo: Field, visualize=False):
+# add graph metrics every frame
+def update(matchInfo: Field):
     currentNeutralFuel = matchInfo.neutralFuel
     currentBlueField = matchInfo.blueFuel
     currentRedField = matchInfo.redFuel
@@ -44,32 +19,41 @@ def update(matchInfo: Field, visualize=False):
     globalNeutralFuel.append(currentNeutralFuel)
     globalBlueFuel.append(currentBlueField)
     globalRedFuel.append(currentRedField)
-    time.append(matchInfo.timestamp)
+    time.append(matchInfo.timestamp / 60)
 
-
-    if visualize:
-        pygame.display.update()
-        screen.blit(background, (0, 0))
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
+# plot graph at the end of match simulation
 def displayGraph(field : Field):
     autoWinner = ""
     plt.plot(time,globalNeutralFuel, c= "grey", label = "Fuel in Neutral")
     plt.plot(time,globalBlueFuel, c = "blue" ,label = "Fuel in Blue Posession")
     plt.plot(time,globalRedFuel, c = "red", label = "Fuel in Red Posession")
+
+    plt.axvspan(0, 30, alpha=0.2, color="gray") # auto and transition highlight
     if field.redWonAuto:
-	    autoWinner = "Red"
+        autoWinner = "Red"
+
+        # highlight shifts
+        plt.axvspan(30, 55, alpha=0.2, color="blue")
+        plt.axvspan(55, 80, alpha=0.2, color="red")
+        plt.axvspan(80, 105, alpha=0.2, color="blue")
+        plt.axvspan(105, 130, alpha=0.2, color="red")
     else:
         autoWinner = "Blue"
+
+        # highlight shifts
+        plt.axvspan(30, 55, alpha=0.2, color="red")
+        plt.axvspan(55, 80, alpha=0.2, color="blue")
+        plt.axvspan(80, 105, alpha=0.2, color="red")
+        plt.axvspan(105, 130, alpha=0.2, color="blue")
+
+    # highlight endgame
+    plt.axvspan(130, 160, alpha=0.2, color="gray")
+
     if field.redScore >= field.blueScore:
         plt.title(f"Red wins {field.redScore}-{field.blueScore}. Auto Winner: {autoWinner}")
     else:
         plt.title(f"Blue wins {field.blueScore}-{field.redScore}. Auto Winner: {autoWinner}")
-    plt.xlabel("Time in Frames")
+    plt.xlabel("Time (s)")
     plt.ylabel("Fuel Amount")
 
     plt.legend()

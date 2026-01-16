@@ -21,24 +21,6 @@ class Field:
         self.pastAuto = False
         self.redWonAuto = False
         self.timestamp = 0
-    #score fuel/fuel back to neutral
-    def addBlueScore(self):
-        if self.state != fieldState.RED_ACTIVE:
-            self.blueScore += 1
-            self.neutralFuel += 1
-
-    def addRedScore(self):
-        if self.state != fieldState.BLUE_ACTIVE:
-            self.redScore += 1
-            self.neutralFuel += 1
-    # lose fuel/fuel intaked
-
-    def blueIntake(self):
-        self.blueFuel -= 1
-    def redIntake(self):
-        self.redFuel -= 1
-    def neutralIntake(self):
-        self.neutralFuel -= 1
 
     def calculateHubOrder(self):
         if not self.pastAuto:
@@ -53,12 +35,6 @@ class Field:
                 self.redWonAuto = False
             self.pastAuto = True
 
-    def shuttleRed(self):
-        self.redFuel += 1
-
-    def shuttleBlue(self):
-        self.blueFuel += 1
-
     def update(self, timeStampInFrames: int):
         timeStampInFrames = timeStampInFrames * 2
         self.timestamp = timeStampInFrames
@@ -67,7 +43,7 @@ class Field:
         elif timeStampInFrames <= 1800/2:
             self.state = fieldState.TRANS
             self.calculateHubOrder()
-        if self.redWonAuto and (timeStampInFrames >= 1800): # set the times
+        if self.redWonAuto and (timeStampInFrames >= 1800): # set the times of shifts
             if timeStampInFrames <= 3300:
                 self.state = fieldState.BLUE_ACTIVE
             elif timeStampInFrames <= 4800:

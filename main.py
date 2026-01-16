@@ -16,16 +16,16 @@ frame = 0
 # strategies are imported from instructions.py [cycle, shoot, shuttle]
 
 # RED ALLIANCE (0-2)
-robot0 = Robot(field, alliance.RED, 4, 4, 144, 20, True, cycle)
-robot1 = Robot(field, alliance.RED, 4, 4, 144, 20, True, cycle)
-robot2 = Robot(field, alliance.RED, 4, 4, 144, 20, True, shuttle)
+robot0 = Robot(field, alliance.RED, 3, 3, 144, 8, True, cycle)
+robot1 = Robot(field, alliance.RED, 3, 3, 144, 8, True, cycle)
+robot2 = Robot(field, alliance.RED, 3, 3, 144, 8, True, cycle)
 
 # BLUE ALLIANCE (3-5)
-robot3 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
-robot4 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
-robot5 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
+robot3 = Robot(field, alliance.BLUE, 3, 3, 144, 8, True, cycle)
+robot4 = Robot(field, alliance.BLUE, 3, 3, 144, 8, True, cycle)
+robot5 = Robot(field, alliance.BLUE, 3, 3, 144, 8, True, cycle)
 
-print("beginning simulation")
+print("beginning simulation.")
 
 while True:
     start_time = time.time()
@@ -36,13 +36,6 @@ while True:
     robot0.tick()
     robot1.tick()
     robot2.tick()
-
-    # display.drawRobot(robot0)
-    # display.drawRobot(robot1)
-    # display.drawRobot(robot2)
-    # display.drawRobot(robot3)
-    # display.drawRobot(robot4)
-    # display.drawRobot(robot5)
 
     # increment frame number
     frame += 1
@@ -55,3 +48,5 @@ while True:
         break
 
 display.displayGraph(field)
+
+print("finished simulating.")
