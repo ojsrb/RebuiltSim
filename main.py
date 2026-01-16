@@ -4,34 +4,28 @@ from models.robot import Robot, alliance
 from models.instructions import *
 import models.display as display
 
+# initialize field (contains match variables and field stats)
 field = Field(0,0, 400, 0, 0)
 
+# current frame
 frame = 0
 
-# RED ALLIANCE
+# Robot params:
+# field: Field, color: alliance, shootSpeed: int (fuel/s), intakeSpeed: int (fuel/s), drive speed: int (inches/s), preload: bool, strategy: Instruction
+
+# strategies are imported from instructions.py [cycle, shoot, shuttle]
+
+# RED ALLIANCE (0-2)
 robot0 = Robot(field, alliance.RED, 4, 4, 144, 20, True, cycle)
 robot1 = Robot(field, alliance.RED, 4, 4, 144, 20, True, cycle)
 robot2 = Robot(field, alliance.RED, 4, 4, 144, 20, True, shuttle)
-# shoot speed, intakespeed, drive speed, capacity
 
-# BLUE ALLIANCE
+# BLUE ALLIANCE (3-5)
 robot3 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
 robot4 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
 robot5 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
 
-# # RED ALLIANCE
-# robot0 = Robot(field, alliance.RED, 8, 8, 240, 45, True, cycle)
-# robot1 = Robot(field, alliance.RED, 8, 8, 240, 45, True, cycle)
-# robot2 = Robot(field, alliance.RED, 8, 8, 240, 45, True, shuttle)
-# # shoot speed, intakespeed, drive speed, capacity
-
-# # BLUE ALLIANCE
-# robot3 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
-# robot4 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
-# robot5 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
-
-
-elapsed_time = 1
+print("beginning simulation")
 
 while True:
     start_time = time.time()
@@ -42,6 +36,7 @@ while True:
     robot0.tick()
     robot1.tick()
     robot2.tick()
+
     # display.drawRobot(robot0)
     # display.drawRobot(robot1)
     # display.drawRobot(robot2)
@@ -49,20 +44,13 @@ while True:
     # display.drawRobot(robot4)
     # display.drawRobot(robot5)
 
-    print(
-        f"{round(1/elapsed_time)}fps | "
-        f"field state: {field.state} | "
-        f"red: {field.redScore} | "
-        f"blue: {field.blueScore} | "
-        f"neutral: {field.neutralFuel} | "
-        f"blue field fuel: {field.blueFuel} | "
-        f"red field fuel: {field.redFuel} | ",
-        flush=True,
-    )
+    # increment frame number
     frame += 1
+
+    # update graph
     display.update(field)
-    end_time = time.time()
-    elapsed_time = end_time - start_time
+
+    # end sim if the field has ended the match
     if field.state == fieldState.OVER:
         break
 
