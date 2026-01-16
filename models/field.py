@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 class fieldState(Enum):
     AUTO = 1
@@ -43,6 +44,11 @@ class Field:
         if not self.pastAuto:
             if self.redScore > self.blueScore:
                 self.redWonAuto = True
+            elif self.redScore == self.blueScore: # choose a random side to win if the scores are tied
+                if random.randint(1, 2) == 1:
+                    self.redWonAuto = True
+                else:
+                    self.redWonAuto = False
             else:
                 self.redWonAuto = False
             self.pastAuto = True

@@ -118,6 +118,8 @@ class Robot:
                         self.field.redFuel -= 1
                         self.fuel += 1
                         print("intaking red", self.fuel)
+                    else:
+                        self.nextAction()
                     if self.fuel == self.capacity:
                         self.nextAction()
             else:

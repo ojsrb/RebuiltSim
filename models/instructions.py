@@ -4,6 +4,9 @@ from models.field import Field, fieldState
 
 cycle = Instruction() # go to neutral, intake, go home, score, and shuttle while inactive
 cycle.activeHub([
+    action.MOVE_HOME,
+    action.INTAKE,
+    action.SCORE,
     action.MOVE_NEUTRAL,
     action.INTAKE,
     action.MOVE_HOME,
@@ -26,7 +29,8 @@ shuttle.inactiveHub([
 
 shoot = Instruction() # bots will always shoot during active
 shoot.activeHub([
-    action.MOVE_NEUTRAL,
+    action.MOVE_HOME,
+    action.INTAKE,
     action.SCORE,
 ])
 shoot.inactiveHub([

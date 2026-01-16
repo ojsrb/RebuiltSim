@@ -9,15 +9,27 @@ field = Field(0,0, 400, 0, 0)
 frame = 0
 
 # RED ALLIANCE
-robot0 = Robot(field, alliance.RED, 8, 8, 240, 45, True, cycle)
-robot1 = Robot(field, alliance.RED, 8, 8, 240, 45, True, shuttle)
-robot2 = Robot(field, alliance.RED, 8, 8, 240, 45, True, shoot)
+robot0 = Robot(field, alliance.RED, 4, 4, 144, 20, True, cycle)
+robot1 = Robot(field, alliance.RED, 4, 4, 144, 20, True, cycle)
+robot2 = Robot(field, alliance.RED, 4, 4, 144, 20, True, shuttle)
+# shoot speed, intakespeed, drive speed, capacity
 
-# self, redFuel : int, blueFuel : int,neutralFuel : int,redScore : int,blueScore : int
 # BLUE ALLIANCE
-robot3 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
-robot4 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
-robot5 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
+robot3 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
+robot4 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
+robot5 = Robot(field, alliance.BLUE, 4, 4, 144, 20, True, cycle)
+
+# # RED ALLIANCE
+# robot0 = Robot(field, alliance.RED, 8, 8, 240, 45, True, cycle)
+# robot1 = Robot(field, alliance.RED, 8, 8, 240, 45, True, cycle)
+# robot2 = Robot(field, alliance.RED, 8, 8, 240, 45, True, shuttle)
+# # shoot speed, intakespeed, drive speed, capacity
+
+# # BLUE ALLIANCE
+# robot3 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
+# robot4 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
+# robot5 = Robot(field, alliance.BLUE, 8, 8, 240, 45, True, cycle)
+
 
 elapsed_time = 1
 

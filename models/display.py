@@ -66,9 +66,9 @@ def displayGraph(field : Field):
     else:
         autoWinner = "Blue"
     if field.redScore >= field.blueScore:
-        plt.title(f"Red wins with {field.redScore}. Auto Winner: {autoWinner}")
+        plt.title(f"Red wins {field.redScore}-{field.blueScore}. Auto Winner: {autoWinner}")
     else:
-        plt.title(f"Blue wins with {field.blueScore}. Auto Winner: {autoWinner}")
+        plt.title(f"Blue wins {field.blueScore}-{field.redScore}. Auto Winner: {autoWinner}")
     plt.xlabel("Time in Frames")
     plt.ylabel("Fuel Amount")
 
