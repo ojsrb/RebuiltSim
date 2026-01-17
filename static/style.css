@@ -1,0 +1,388 @@
+/* FRC 2026 Strategy Simulator Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #e63946, #457b9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* Alliance Layout */
+.alliances {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.alliance h2 {
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0;
+}
+
+.red-alliance h2 {
+    background: linear-gradient(135deg, #c62828, #e53935);
+    color: white;
+}
+
+.blue-alliance h2 {
+    background: linear-gradient(135deg, #1565c0, #1976d2);
+    color: white;
+}
+
+.robots {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    background: #16213e;
+    border-radius: 0 0 10px 10px;
+}
+
+.red-alliance .robots {
+    border: 2px solid #c62828;
+    border-top: none;
+}
+
+.blue-alliance .robots {
+    border: 2px solid #1565c0;
+    border-top: none;
+}
+
+/* Robot Cards */
+.robot-card {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #333;
+    transition: opacity 0.3s, filter 0.3s;
+}
+
+.robot-card.disabled {
+    opacity: 0.4;
+    filter: grayscale(50%);
+}
+
+.robot-card.disabled .param {
+    pointer-events: none;
+}
+
+.robot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+}
+
+.robot-card h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.enable-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+}
+
+.enable-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.red-alliance .robot-card h3 {
+    color: #ef5350;
+}
+
+.blue-alliance .robot-card h3 {
+    color: #42a5f5;
+}
+
+/* Parameters */
+.param {
+    margin-bottom: 10px;
+}
+
+.param label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: #aaa;
+}
+
+.param .value {
+    color: #fff;
+    font-weight: bold;
+}
+
+.param input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #333;
+    outline: none;
+    cursor: pointer;
+}
+
+.red-alliance .param input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e53935;
+    cursor: pointer;
+}
+
+.blue-alliance .param input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #1976d2;
+    cursor: pointer;
+}
+
+.param.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.param.checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.param select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.param select:focus {
+    outline: none;
+    border-color: #666;
+}
+
+/* Controls */
+.controls {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#runSimulation {
+    padding: 15px 50px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e63946, #457b9d);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#runSimulation:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(230, 57, 70, 0.4);
+}
+
+#runSimulation:active {
+    transform: translateY(0);
+}
+
+#runSimulation:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#loading {
+    margin-left: 15px;
+    color: #888;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Results */
+.results {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 20px;
+    background: #16213e;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.score.red-wins {
+    border: 2px solid #e53935;
+    color: #ef5350;
+}
+
+.score.blue-wins {
+    border: 2px solid #1976d2;
+    color: #42a5f5;
+}
+
+.score.tie {
+    border: 2px solid #888;
+    color: #aaa;
+}
+
+.graph-container {
+    background: #16213e;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#graph {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.placeholder {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Math Panel */
+.math-panel {
+    background: #16213e;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.math-panel summary {
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px 0;
+}
+
+.math-panel summary:hover {
+    color: #42a5f5;
+}
+
+.math-content {
+    margin-top: 20px;
+}
+
+.math-content h4 {
+    margin: 20px 0 10px 0;
+    color: #888;
+}
+
+.math-content h4:first-child {
+    margin-top: 0;
+}
+
+.math-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.math-content th,
+.math-content td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.math-content th {
+    background: #1a1a2e;
+    color: #aaa;
+    font-weight: normal;
+}
+
+.math-content code {
+    background: #1a1a2e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    color: #42a5f5;
+}
+
+.math-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.math-content li {
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+
+.math-content li:last-child {
+    border-bottom: none;
+}
+
+.math-content strong {
+    color: #42a5f5;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .alliances {
+        grid-template-columns: 1fr;
+    }
+}

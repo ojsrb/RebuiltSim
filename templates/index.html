@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRC 2026 Strategy Simulator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FRC 2026 Strategy Simulator</h1>
+            <p class="subtitle">Adjust robot parameters and run simulations to test different strategies</p>
+        </header>
+
+        <div class="alliances">
+            <!-- RED ALLIANCE -->
+            <div class="alliance red-alliance">
+                <h2>Red Alliance</h2>
+                <div class="robots">
+                    <div class="robot-card" id="robot-0">
+                        <div class="robot-header">
+                            <h3>Robot 0</h3>
+                            <label class="enable-toggle"><input type="checkbox" class="enabled" checked> Enabled</label>
+                        </div>
+                        <div class="param">
+                            <label>Shoot Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="shootSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Intake Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="intakeSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Drive Speed: <span class="value">144</span> in/s</label>
+                            <input type="range" class="driveSpeed" min="60" max="200" step="12" value="144">
+                        </div>
+                        <div class="param">
+                            <label>Capacity: <span class="value">8</span> fuel</label>
+                            <input type="range" class="capacity" min="1" max="15" step="1" value="8">
+                        </div>
+                        <div class="param checkbox">
+                            <label><input type="checkbox" class="preload" checked> Preload (8 fuel)</label>
+                        </div>
+                        <div class="param">
+                            <label>Strategy:</label>
+                            <select class="strategy">
+                                <option value="cycle" selected>Cycle</option>
+                                <option value="shuttle">Shuttle</option>
+                                <option value="shoot">Shoot</option>
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="robot-card" id="robot-1">
+                        <div class="robot-header">
+                            <h3>Robot 1</h3>
+                            <label class="enable-toggle"><input type="checkbox" class="enabled" checked> Enabled</label>
+                        </div>
+                        <div class="param">
+                            <label>Shoot Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="shootSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Intake Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="intakeSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Drive Speed: <span class="value">144</span> in/s</label>
+                            <input type="range" class="driveSpeed" min="60" max="200" step="12" value="144">
+                        </div>
+                        <div class="param">
+                            <label>Capacity: <span class="value">8</span> fuel</label>
+                            <input type="range" class="capacity" min="1" max="15" step="1" value="8">
+                        </div>
+                        <div class="param checkbox">
+                            <label><input type="checkbox" class="preload" checked> Preload (8 fuel)</label>
+                        </div>
+                        <div class="param">
+                            <label>Strategy:</label>
+                            <select class="strategy">
+                                <option value="cycle" selected>Cycle</option>
+                                <option value="shuttle">Shuttle</option>
+                                <option value="shoot">Shoot</option>
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="robot-card" id="robot-2">
+                        <div class="robot-header">
+                            <h3>Robot 2</h3>
+                            <label class="enable-toggle"><input type="checkbox" class="enabled" checked> Enabled</label>
+                        </div>
+                        <div class="param">
+                            <label>Shoot Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="shootSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Intake Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="intakeSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Drive Speed: <span class="value">144</span> in/s</label>
+                            <input type="range" class="driveSpeed" min="60" max="200" step="12" value="144">
+                        </div>
+                        <div class="param">
+                            <label>Capacity: <span class="value">8</span> fuel</label>
+                            <input type="range" class="capacity" min="1" max="15" step="1" value="8">
+                        </div>
+                        <div class="param checkbox">
+                            <label><input type="checkbox" class="preload" checked> Preload (8 fuel)</label>
+                        </div>
+                        <div class="param">
+                            <label>Strategy:</label>
+                            <select class="strategy">
+                                <option value="cycle" selected>Cycle</option>
+                                <option value="shuttle">Shuttle</option>
+                                <option value="shoot">Shoot</option>
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLUE ALLIANCE -->
+            <div class="alliance blue-alliance">
+                <h2>Blue Alliance</h2>
+                <div class="robots">
+                    <div class="robot-card" id="robot-3">
+                        <div class="robot-header">
+                            <h3>Robot 3</h3>
+                            <label class="enable-toggle"><input type="checkbox" class="enabled" checked> Enabled</label>
+                        </div>
+                        <div class="param">
+                            <label>Shoot Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="shootSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Intake Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="intakeSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Drive Speed: <span class="value">144</span> in/s</label>
+                            <input type="range" class="driveSpeed" min="60" max="200" step="12" value="144">
+                        </div>
+                        <div class="param">
+                            <label>Capacity: <span class="value">8</span> fuel</label>
+                            <input type="range" class="capacity" min="1" max="15" step="1" value="8">
+                        </div>
+                        <div class="param checkbox">
+                            <label><input type="checkbox" class="preload" checked> Preload (8 fuel)</label>
+                        </div>
+                        <div class="param">
+                            <label>Strategy:</label>
+                            <select class="strategy">
+                                <option value="cycle" selected>Cycle</option>
+                                <option value="shuttle">Shuttle</option>
+                                <option value="shoot">Shoot</option>
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="robot-card" id="robot-4">
+                        <div class="robot-header">
+                            <h3>Robot 4</h3>
+                            <label class="enable-toggle"><input type="checkbox" class="enabled" checked> Enabled</label>
+                        </div>
+                        <div class="param">
+                            <label>Shoot Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="shootSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Intake Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="intakeSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Drive Speed: <span class="value">144</span> in/s</label>
+                            <input type="range" class="driveSpeed" min="60" max="200" step="12" value="144">
+                        </div>
+                        <div class="param">
+                            <label>Capacity: <span class="value">8</span> fuel</label>
+                            <input type="range" class="capacity" min="1" max="15" step="1" value="8">
+                        </div>
+                        <div class="param checkbox">
+                            <label><input type="checkbox" class="preload" checked> Preload (8 fuel)</label>
+                        </div>
+                        <div class="param">
+                            <label>Strategy:</label>
+                            <select class="strategy">
+                                <option value="cycle" selected>Cycle</option>
+                                <option value="shuttle">Shuttle</option>
+                                <option value="shoot">Shoot</option>
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="robot-card" id="robot-5">
+                        <div class="robot-header">
+                            <h3>Robot 5</h3>
+                            <label class="enable-toggle"><input type="checkbox" class="enabled" checked> Enabled</label>
+                        </div>
+                        <div class="param">
+                            <label>Shoot Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="shootSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Intake Speed: <span class="value">3</span> fuel/s</label>
+                            <input type="range" class="intakeSpeed" min="1" max="10" step="0.5" value="3">
+                        </div>
+                        <div class="param">
+                            <label>Drive Speed: <span class="value">144</span> in/s</label>
+                            <input type="range" class="driveSpeed" min="60" max="200" step="12" value="144">
+                        </div>
+                        <div class="param">
+                            <label>Capacity: <span class="value">8</span> fuel</label>
+                            <input type="range" class="capacity" min="1" max="15" step="1" value="8">
+                        </div>
+                        <div class="param checkbox">
+                            <label><input type="checkbox" class="preload" checked> Preload (8 fuel)</label>
+                        </div>
+                        <div class="param">
+                            <label>Strategy:</label>
+                            <select class="strategy">
+                                <option value="cycle" selected>Cycle</option>
+                                <option value="shuttle">Shuttle</option>
+                                <option value="shoot">Shoot</option>
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="runSimulation" onclick="runSimulation()">Run Simulation</button>
+            <span id="loading" class="hidden">Running simulation...</span>
+        </div>
+
+        <div class="results">
+            <div id="score" class="score hidden"></div>
+            <div class="graph-container">
+                <img id="graph" alt="Simulation results will appear here" class="hidden">
+                <div id="placeholder" class="placeholder">
+                    <p>Adjust parameters above and click "Run Simulation" to see results</p>
+                </div>
+            </div>
+        </div>
+
+        <details class="math-panel">
+            <summary>Math & Timing Formulas</summary>
+            <div class="math-content">
+                <h4>Robot Action Timings (at 30 FPS)</h4>
+                <table>
+                    <tr>
+                        <th>Action</th>
+                        <th>Formula</th>
+                        <th>Example (default params)</th>
+                    </tr>
+                    <tr>
+                        <td>Drive between zones</td>
+                        <td><code>(310 / driveSpeed) * 30</code> frames</td>
+                        <td>(310 / 144) * 30 = 64.6 frames = 2.15s</td>
+                    </tr>
+                    <tr>
+                        <td>Intake cooldown</td>
+                        <td><code>floor((1 / intakeSpeed) * 30)</code> frames</td>
+                        <td>floor((1 / 3) * 30) = 10 frames = 0.33s</td>
+                    </tr>
+                    <tr>
+                        <td>Shoot cooldown</td>
+                        <td><code>floor((1 / shootSpeed) * 30)</code> frames</td>
+                        <td>floor((1 / 3) * 30) = 10 frames = 0.33s</td>
+                    </tr>
+                    <tr>
+                        <td>Pass cooldown</td>
+                        <td><code>shootCooldown + intakeCooldown</code> frames</td>
+                        <td>10 + 10 = 20 frames = 0.67s</td>
+                    </tr>
+                </table>
+
+                <h4>Match Timeline</h4>
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Auto</td>
+                        <td>0-20s</td>
+                        <td>Both alliances active, determines hub order</td>
+                    </tr>
+                    <tr>
+                        <td>Transition</td>
+                        <td>20-30s</td>
+                        <td>Scoring disabled, hub order calculated</td>
+                    </tr>
+                    <tr>
+                        <td>Hub Cycle 1</td>
+                        <td>30-55s</td>
+                        <td>Auto loser's hub active first</td>
+                    </tr>
+                    <tr>
+                        <td>Hub Cycle 2</td>
+                        <td>55-80s</td>
+                        <td>Hubs switch</td>
+                    </tr>
+                    <tr>
+                        <td>Hub Cycle 3</td>
+                        <td>80-105s</td>
+                        <td>Hubs switch</td>
+                    </tr>
+                    <tr>
+                        <td>Hub Cycle 4</td>
+                        <td>105-130s</td>
+                        <td>Hubs switch</td>
+                    </tr>
+                    <tr>
+                        <td>Endgame</td>
+                        <td>130-160s</td>
+                        <td>Both alliances active</td>
+                    </tr>
+                </table>
+
+                <h4>Strategy Descriptions</h4>
+                <ul>
+                    <li><strong>Cycle:</strong> Move home → intake → score → neutral → intake → home → score. When inactive: shuttle fuel.</li>
+                    <li><strong>Shuttle:</strong> Stay in neutral zone and pass fuel to alliance zone.</li>
+                    <li><strong>Shoot:</strong> Stay home, intake and score delivered fuel. When inactive: shuttle.</li>
+                    <li><strong>Test:</strong> Minimal strategy - just shuttle from neutral.</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
